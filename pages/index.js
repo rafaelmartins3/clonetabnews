@@ -7,6 +7,14 @@ export default function Home() {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     let angle = 0;
+    
+    const ball = {
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      radius: 10,
+      dx: 2,
+      dy: 2
+    };
 
     function drawOctagon(x, y, size) {
       ctx.beginPath();
@@ -20,20 +28,39 @@ export default function Home() {
       ctx.closePath();
       ctx.strokeStyle = 'white';
       ctx.stroke();
+      return ctx.getImageData(0, 0, canvas.width, canvas.height);
     }
 
-    function drawCircle(x, y, radius) {
+    function drawBall(x, y, radius) {
       ctx.beginPath();
       ctx.arc(x, y, radius, 0, Math.PI * 2);
       ctx.fillStyle = 'red';
       ctx.fill();
     }
 
+    function isInsideOctagon(x, y, imageData) {
+      const index = (y * imageData.width + x) * 4;
+      return imageData.data[index + 3] > 0;
+    }
+
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      drawOctagon(canvas.width / 2, canvas.height / 2, 100);
-      drawCircle(canvas.width / 2, canvas.height / 2, 20);
+      const octagonImageData = drawOctagon(canvas.width / 2, canvas.height / 2, 100);
+      
+      ball.x += ball.dx;
+      ball.y += ball.dy;
+
+      if (!isInsideOctagon(ball.x + ball.radius, ball.y, octagonImageData) ||
+          !isInsideOctagon(ball.x - ball.radius, ball.y, octagonImageData)) {
+        ball.dx = -ball.dx;
+      }
+      if (!isInsideOctagon(ball.x, ball.y + ball.radius, octagonImageData) ||
+          !isInsideOctagon(ball.x, ball.y - ball.radius, octagonImageData)) {
+        ball.dy = -ball.dy;
+      }
+
+      drawBall(ball.x, ball.y, ball.radius);
 
       angle += 0.02;
       requestAnimationFrame(animate);
