@@ -1,19 +1,19 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 export default function Home() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     let angle = 0;
-    
+
     const ball = {
       x: canvas.width / 2,
       y: canvas.height / 2,
       radius: 10,
       dx: 2,
-      dy: 2
+      dy: 2,
     };
 
     function drawOctagon(x, y, size) {
@@ -26,7 +26,7 @@ export default function Home() {
         else ctx.lineTo(sx, sy);
       }
       ctx.closePath();
-      ctx.strokeStyle = 'white';
+      ctx.strokeStyle = "white";
       ctx.stroke();
       return ctx.getImageData(0, 0, canvas.width, canvas.height);
     }
@@ -34,7 +34,7 @@ export default function Home() {
     function drawBall(x, y, radius) {
       ctx.beginPath();
       ctx.arc(x, y, radius, 0, Math.PI * 2);
-      ctx.fillStyle = 'red';
+      ctx.fillStyle = "red";
       ctx.fill();
     }
 
@@ -45,18 +45,26 @@ export default function Home() {
 
     function animate() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      const octagonImageData = drawOctagon(canvas.width / 2, canvas.height / 2, 100);
-      
+
+      const octagonImageData = drawOctagon(
+        canvas.width / 2,
+        canvas.height / 2,
+        100,
+      );
+
       ball.x += ball.dx;
       ball.y += ball.dy;
 
-      if (!isInsideOctagon(ball.x + ball.radius, ball.y, octagonImageData) ||
-          !isInsideOctagon(ball.x - ball.radius, ball.y, octagonImageData)) {
+      if (
+        !isInsideOctagon(ball.x + ball.radius, ball.y, octagonImageData) ||
+        !isInsideOctagon(ball.x - ball.radius, ball.y, octagonImageData)
+      ) {
         ball.dx = -ball.dx;
       }
-      if (!isInsideOctagon(ball.x, ball.y + ball.radius, octagonImageData) ||
-          !isInsideOctagon(ball.x, ball.y - ball.radius, octagonImageData)) {
+      if (
+        !isInsideOctagon(ball.x, ball.y + ball.radius, octagonImageData) ||
+        !isInsideOctagon(ball.x, ball.y - ball.radius, octagonImageData)
+      ) {
         ball.dy = -ball.dy;
       }
 
@@ -82,12 +90,16 @@ export default function Home() {
   );
 }
 
+function teste() {
+  console.log("teste");
+}
+
 const styles = {
   container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '100vh',
-    backgroundColor: '#1a1a1a',
-  }
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    minHeight: "100vh",
+    backgroundColor: "#1a1a1a",
+  },
 };
