@@ -90,9 +90,6 @@ export default function Home() {
   );
 }
 
-function teste() {
-  console.log("teste");
-}
 
 const styles = {
   container: {
