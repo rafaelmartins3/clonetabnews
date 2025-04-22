@@ -1,13 +1,14 @@
 import { Client } from "pg";
 import fs from "fs";
+import path from "path";
 
 async function query(queryObject) {
   const sslConfig =
     process.env.NODE_ENV === "development"
-      ? false // Sem SSL no ambiente de desenvolvimento
+      ? false
       : {
-          rejectUnauthorized: true, // Valida o certificado
-          ca: fs.readFileSync("./prod-ca-2021.crt").toString(), // Certificado fornecido
+          rejectUnauthorized: true,
+          ca: process.env.CA_CERT,
         };
 
   const client = new Client({
